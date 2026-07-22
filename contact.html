@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Nehaan Boutique · Contact</title>
+    <link rel="icon" type="image/x-icon" href="logo.jpeg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .serif-title { font-family: 'Playfair Display', serif; }
+        ::-webkit-scrollbar { display: none; }
+
+        /* ----- VIDEO BACKGROUND (restored) ----- */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: #0a0a0f;
+        }
+        .video-bg .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #132b3a 0%, #0a0a0f 80%);
+        }
+        .video-bg video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            opacity: 0;
+            transition: opacity 1.8s ease;
+            filter: brightness(0.8) saturate(1.1);
+        }
+        .video-bg video.active { opacity: 1; }
+        .video-bg video.fade-out { opacity: 0; }
+
+        /* ----- Simple gradient overlay (no blur) ----- */
+        .gradient-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(30, 144, 200, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(100, 200, 255, 0.06) 0%, transparent 50%),
+                linear-gradient(to bottom, rgba(10, 10, 15, 0.85) 0%, transparent 35%, transparent 65%, rgba(10, 10, 15, 0.95) 100%);
+            pointer-events: none;
+        }
+
+        /* ----- floating particles (subtle, no blur) ----- */
+        .particle-3d {
+            position: fixed;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            pointer-events: none;
+            z-index: 1;
+            animation: floatParticle 20s ease-in-out infinite alternate;
+        }
+        .particle-3d:nth-child(1) { width: 150px; height: 150px; top: 5%; left: -2%; animation-delay: 0s; }
+        .particle-3d:nth-child(2) { width: 80px; height: 80px; bottom: 10%; right: 5%; animation-delay: -4s; }
+        .particle-3d:nth-child(3) { width: 200px; height: 200px; top: 40%; left: 75%; animation-delay: -8s; opacity: 0.12; }
+        .particle-3d:nth-child(4) { width: 60px; height: 60px; top: 15%; right: 15%; animation-delay: -12s; }
+        .particle-3d:nth-child(5) { width: 100px; height: 100px; bottom: 25%; left: 10%; animation-delay: -16s; }
+
+        @keyframes floatParticle {
+            0% { transform: translate(0,0) scale(1) rotate(0deg); }
+            33% { transform: translate(30px,-40px) scale(1.05) rotate(120deg); }
+            66% { transform: translate(-20px,20px) scale(0.95) rotate(240deg); }
+            100% { transform: translate(15px,-15px) scale(1.02) rotate(360deg); }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ----- NAV - solid dark background (no blur) ----- */
+        .navbar-3d {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+            max-width: 80rem;
+            margin: 1.5rem auto 0;
+            width: 92%;
+            background: rgba(10, 10, 15, 0.85);
+            border-radius: 80px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+        }
+        .navbar-3d:hover {
+            background: rgba(10, 10, 15, 0.95);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        .logo-3d {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-3d img {
+            width: 42px;
+            height: 42px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+        .logo-3d span {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 60%, #d4af37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logo-3d span sup {
+            font-size: 0.5em;
+            top: -0.6em;
+            color: #d4af37;
+            -webkit-text-fill-color: #d4af37;
+        }
+
+        .nav-links-3d {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            list-style: none;
+        }
+        .nav-links-3d a {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 400;
+            letter-spacing: 0.8px;
+            position: relative;
+            text-transform: uppercase;
+        }
+        .nav-links-3d a:first-child { color: #ffffff; }
+        .nav-links-3d a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: linear-gradient(90deg, #d4af37, #b8962e);
+            transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .nav-links-3d a:hover { color: #ffffff; }
+        .nav-links-3d a:hover::after { width: 100%; }
+
+        .btn-journey-3d {
+            background: linear-gradient(135deg, #d4af37, #b8962e);
+            color: #0a0a0f;
+            border: none;
+            border-radius: 9999px;
+            padding: 0.7rem 2.2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.25);
+            text-decoration: none;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn-journey-3d:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, #e6c85a, #c9a23a);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .navbar-3d { flex-wrap: wrap; padding: 1rem 1.5rem; border-radius: 40px; margin-top: 1rem; }
+            .nav-links-3d { display: none; width: 100%; flex-direction: column; align-items: center; padding-top: 1rem; gap: 1rem; }
+            .nav-links-3d.open { display: flex; }
+            .nav-links-3d a { font-size: 0.8rem; }
+            .menu-toggle { display: block; }
+            .btn-journey-3d { padding: 0.5rem 1.5rem; font-size: 0.65rem; }
+        }
+
+        /* ----- HERO ----- */
+        .hero {
+            padding: 3rem 1.5rem 2rem;
+            text-align: center;
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.6rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 60%, #d4af37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            color: rgba(255,255,255,0.85);
+            max-width: 620px;
+            margin: 0.8rem auto 0;
+            font-weight: 300;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* ----- CONTACT GRID - cards are solid (no blur) ----- */
+        .contact-grid {
+            max-width: 1100px;
+            margin: 0 auto 3rem;
+            padding: 0 1.2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2.5rem;
+                padding: 0 2rem;
+            }
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+        .info-card {
+            background: rgba(10, 10, 15, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+        .info-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+        .info-card .detail {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95rem;
+        }
+        .info-card .detail i {
+            width: 22px;
+            color: #d4af37;
+            font-size: 1rem;
+        }
+        .info-card .detail a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .info-card .detail a:hover { color: #d4af37; }
+
+        /* Address display – no map */
+        .address-box {
+            margin-top: 0.5rem;
+            padding: 1rem 1.2rem;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            border-left: 3px solid #d4af37;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .address-box i {
+            color: #d4af37;
+            font-size: 1.1rem;
+            width: 22px;
+        }
+
+        /* ----- FORM CARD - solid background ----- */
+        .form-card {
+            background: rgba(10, 10, 15, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+        .form-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 1.2rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #d4af37;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255,255,255,0.25);
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 0.9rem;
+            background: #d4af37;
+            border: none;
+            border-radius: 40px;
+            color: #0a0a0f;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+        .btn-submit:hover { background: #e6c85a; transform: scale(1.02); }
+        .btn-submit i { font-size: 1rem; }
+
+        .form-footer {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .form-footer i { color: #d4af37; }
+
+        /* ----- FOOTER ----- */
+        .footer {
+            text-align: center;
+            padding: 1.8rem 1rem;
+            color: rgba(255,255,255,0.2);
+            font-size: 0.7rem;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            margin-top: 2rem;
+        }
+        .fw-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.04);
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: 0.3s;
+            text-decoration: none;
+            margin-top: 0.6rem;
+        }
+        .fw-badge:hover {
+            color: rgba(255,255,255,0.5);
+            border-color: rgba(212, 175, 55, 0.15);
+            background: rgba(212, 175, 55, 0.04);
+        }
+
+        @media (max-width: 480px) {
+            .info-card, .form-card { padding: 1.5rem; }
+            .contact-grid { padding: 0 0.8rem; }
+            .hero { padding: 2rem 0.8rem 1.5rem; }
+            .address-box { font-size: 0.85rem; padding: 0.8rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== VIDEO BACKGROUND (restored) ===== -->
+    <div class="video-bg">
+        <div class="video-wrapper">
+            <video id="video1" playsinline muted loop preload="metadata">
+                <source src="videos/glass1.mp4" type="video/mp4" />
+            </video>
+            <video id="video2" playsinline muted loop preload="metadata">
+                <source src="videos/glass2.mp4" type="video/mp4" />
+            </video>
+        </div>
+    </div>
+    <div class="gradient-overlay"></div>
+
+    <!-- floating particles -->
+    <div class="particle-3d"></div>
+    <div class="particle-3d"></div>
+    <div class="particle-3d"></div>
+    <div class="particle-3d"></div>
+    <div class="particle-3d"></div>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="content">
+
+        <!-- ===== NAV ===== -->
+        <nav class="navbar-3d">
+            <a href="index.html" class="logo-3d">
+                <img src="logo.jpeg" alt="Nehaan Boutique" onerror="this.style.display='none'" />
+                <span>Nehaan<sup>®</sup></span>
+            </a>
+            <ul class="nav-links-3d" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Collections</a></li>
+                <li><a href="contact.html" style="color:#ffffff;">Contact</a></li>
+                <li><a href="products.html" class="btn-journey-3d">Shop Now</a></li>
+            </ul>
+            <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </nav>
+
+        <!-- ===== HERO ===== -->
+        <div class="hero">
+            <h1>We'd Love to Hear From You</h1>
+            <p>
+                Whether you have a question about our products, need assistance with an order,
+                or simply want to share your feedback — feel free to reach out. We're here to help
+                and will get back to you as soon as possible.
+            </p>
+        </div>
+
+        <!-- ===== CONTACT GRID ===== -->
+        <div class="contact-grid">
+            <!-- LEFT: Info + Address (no map) -->
+            <div class="contact-info">
+                <div class="info-card">
+                    <h3><i class="fa-regular fa-address-card" style="color:#d4af37;margin-right:10px;"></i> Contact Details</h3>
+                    <div class="detail">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <a href="https://wa.me/23055047790" target="_blank">+230 5504 7790</a>
+                    </div>
+                    <div class="detail">
+                        <i class="fa-regular fa-envelope"></i>
+                        <a href="mailto:nehaanboutique@gmail.com">nehaanboutique@gmail.com</a>
+                    </div>
+                    <div class="detail">
+                        <i class="fa-regular fa-building"></i>
+                        <span>Nehaan Boutique Co Ltd</span>
+                    </div>
+                    <div class="address-box">
+                        <i class="fa-regular fa-location-dot"></i>
+                        <span>Morcellement Chazal, Albion, near public beach</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Form -->
+            <div class="form-card">
+                <h3><i class="fa-regular fa-pen-to-square" style="color:#d4af37;margin-right:10px;"></i> Send a Message</h3>
+                <form id="contactForm" onsubmit="sendWhatsApp(event)">
+                    <div class="form-group">
+                        <label for="name">Your Name *</label>
+                        <input type="text" id="name" placeholder="e.g. John Doe" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject (optional)</label>
+                        <input type="text" id="subject" placeholder="Order inquiry, product question..." />
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message *</label>
+                        <textarea id="message" placeholder="Write your message here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-brands fa-whatsapp"></i> Send via WhatsApp
+                    </button>
+                </form>
+                <div class="form-footer">
+                    <i class="fa-regular fa-circle-check"></i> We'll respond as soon as possible.
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div class="footer">
+            <p>&copy; 2026 Nehaan Boutique Co Ltd · Mauritius</p>
+            <div>
+                <span class="fw-badge"><i class="fa-regular fa-heart" style="color:#d4af37;margin-right:6px;"></i> made with Fuzzy Wire</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== MOBILE MENU =====
+        function toggleMobileMenu() {
+            const nav = document.getElementById('navLinks');
+            nav.classList.toggle('open');
+        }
+
+        // ===== FORM SUBMISSION TO WHATSAPP =====
+        function sendWhatsApp(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !message) {
+                alert('Please fill in your name and message.');
+                return;
+            }
+
+            const phone = '23055047790';
+            let msg = `Hello Nehaan Boutique, I have a message:\n\n`;
+            msg += `Name: ${name}\n`;
+            if (subject) msg += `Subject: ${subject}\n`;
+            msg += `\nMessage:\n${message}`;
+
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // ===== VIDEO BACKGROUND (crossfade) =====
+        (function() {
+            const v1 = document.getElementById('video1');
+            const v2 = document.getElementById('video2');
+            if (!v1 || !v2) return;
+            let active = 1;
+            let isTransitioning = false;
+
+            function fadeVideos() {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                if (active === 1) {
+                    v1.classList.add('fade-out');
+                    v1.classList.remove('active');
+                    v2.classList.remove('fade-out');
+                    v2.classList.add('active');
+                    active = 2;
+                } else {
+                    v2.classList.add('fade-out');
+                    v2.classList.remove('active');
+                    v1.classList.remove('fade-out');
+                    v1.classList.add('active');
+                    active = 1;
+                }
+                setTimeout(() => { isTransitioning = false; }, 1400);
+            }
+
+            function initVideos() {
+                v1.classList.add('active');
+                v2.classList.remove('active');
+                v2.classList.add('fade-out');
+                v1.play().catch(() => {});
+                v2.play().catch(() => {});
+                setInterval(fadeVideos, 7000);
+            }
+
+            if (v1.readyState >= 1 && v2.readyState >= 1) {
+                initVideos();
+            } else {
+                v1.addEventListener('loadeddata', () => { if (v2.readyState >= 1) initVideos(); });
+                v2.addEventListener('loadeddata', () => { if (v1.readyState >= 1) initVideos(); });
+                setTimeout(() => {
+                    if (!v1.classList.contains('active') && !v2.classList.contains('active')) {
+                        v1.classList.add('active');
+                        v1.play().catch(() => {});
+                        v2.play().catch(() => {});
+                        setTimeout(() => {
+                            v2.classList.add('fade-out');
+                            setInterval(fadeVideos, 7000);
+                        }, 500);
+                    }
+                }, 3000);
+            }
+        })();
+    </script>
+
+</body>
+</html>
