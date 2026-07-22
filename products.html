@@ -98,7 +98,7 @@
             min-height: 100vh;
         }
 
-        /* ----- NAV (mobile‑friendly) ----- */
+        /* ----- NAV (mobile‑friendly, brand name bigger & visible) ----- */
         .navbar-3d {
             display: flex;
             justify-content: space-between;
@@ -126,8 +126,8 @@
             text-decoration: none;
         }
         .logo-3d img {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             object-fit: cover;
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -135,18 +135,23 @@
         }
         .logo-3d span {
             font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
+            font-size: 1.8rem;
+            font-weight: 600;
             letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #ffffff 60%, #d4af37);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #ffffff;
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
         }
         .logo-3d span sup {
             font-size: 0.5em;
             top: -0.6em;
             color: #d4af37;
             -webkit-text-fill-color: #d4af37;
+        }
+        .logo-3d .brand-sub {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.4);
+            font-weight: 300;
+            letter-spacing: 1px;
         }
 
         .nav-links-3d {
@@ -242,7 +247,8 @@
             .menu-toggle { display: block; }
             .btn-journey-3d { padding: 0.4rem 1.2rem; font-size: 0.55rem; }
             .logo-3d img { width: 28px; height: 28px; }
-            .logo-3d span { font-size: 1.2rem; }
+            .logo-3d span { font-size: 1.4rem; }
+            .logo-3d .brand-sub { font-size: 0.55rem; }
         }
 
         /* ----- HERO ----- */
@@ -619,7 +625,7 @@
         }
         .modal-image .color-swatches .swatch:hover { transform: scale(1.1); }
         .modal-image .color-swatches .swatch.active { border-color: #d4af37; }
-        .modal-image .color-swatches .swatch.red { background: #dc2626; }
+        .modal-image .color-swatches .swatch.pink { background: #ffb6c1; }
         .modal-image .color-swatches .swatch.black { background: #1f1f1f; }
         .modal-image .color-swatches .swatch.blue { background: #2563eb; }
         .modal-image .color-swatches .swatch.green { background: #16a34a; }
@@ -1129,7 +1135,7 @@
         <nav class="navbar-3d">
             <a href="index.html" class="logo-3d">
                 <img src="logo.jpeg" alt="Nehaan Boutique" onerror="this.style.display='none'" />
-                <span>Nehaan<sup>®</sup></span>
+                <span>Nehaan Boutique</span>
             </a>
             <ul class="nav-links-3d" id="navLinks">
                 <li><a href="index.html">Home</a></li>
@@ -1272,7 +1278,7 @@
 
     <script>
         // --------------------------------------------------------------
-        // 1. PRODUCT DATA (with mint green replacing transparent & stockStatus)
+        // 1. PRODUCT DATA (red replaced with pink for p6 & p7)
         // --------------------------------------------------------------
         const products = [
             { id: 'p1', name: 'Ice Cream Cup Set of 6', price: 250, desc: 'Elegant set of 6 ice cream cups, perfect for desserts and entertaining. Durable glass with a classic design that adds a touch of sophistication to any table setting.', image: 'images/set1.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
@@ -1292,10 +1298,10 @@
                     { url: 'images/bowl3.jpeg', color: 'mint' },
                     { url: 'images/bowl4.jpeg', color: 'white' },
                     { url: 'images/bowl5.jpeg', color: 'green' },
-                    { url: 'images/bowl6.jpeg', color: 'red' },
+                    { url: 'images/bowl6.jpeg', color: 'pink' },  // changed from red
                     { url: 'images/bowl7.jpeg', color: 'blue' }
                 ],
-                colors: ['red', 'black', 'blue', 'green', 'mint', 'white'],
+                colors: ['pink', 'black', 'blue', 'green', 'mint', 'white'], // changed
                 tiered: true,
                 tier1: { min: 1, max: 1, price: 225 },
                 tier2: { min: 2, max: 2, price: 425 },
@@ -1312,12 +1318,12 @@
                     { url: 'images/bowl11.jpeg', color: 'default' },
                     { url: 'images/bowl12.jpeg', color: 'black' },
                     { url: 'images/bowl13.jpeg', color: 'green' },
-                    { url: 'images/bowl14.jpeg', color: 'red' },
+                    { url: 'images/bowl14.jpeg', color: 'pink' },  // changed from red
                     { url: 'images/bowl15.jpeg', color: 'white' },
                     { url: 'images/bowl16.jpeg', color: 'blue' },
                     { url: 'images/bowl17.jpeg', color: 'mint' }
                 ],
-                colors: ['red', 'black', 'blue', 'green', 'mint', 'white'],
+                colors: ['pink', 'black', 'blue', 'green', 'mint', 'white'], // changed
                 tiered: true,
                 tier1: { min: 1, max: 1, price: 195 },
                 tier2: { min: 2, max: 2, price: 375 },
@@ -1327,25 +1333,25 @@
         ];
 
         // --------------------------------------------------------------
-        // 2. PRICING HELPER
+        // 2. PRICING HELPER – pair pricing logic
         // --------------------------------------------------------------
         function calculateProductTotal(productId, qty) {
             const p = products.find(prod => prod.id === productId);
             if (!p) return 0;
             if (!p.tiered) return p.price * qty;
-            const t1 = p.tier1 || { price: 195 };
-            const t2 = p.tier2 || { price: 375 };
-            const t3 = p.tier3 || { unitPrice: 195 };
-            if (qty === 1) return t1.price;
-            if (qty === 2) return t2.price;
-            return t2.price + (qty - 2) * t3.unitPrice;
+            // Pair pricing: price = pairs * tier2_price + remainder * tier1_price
+            const tier1Price = p.tier1.price;
+            const tier2Price = p.tier2.price;
+            const pairs = Math.floor(qty / 2);
+            const remainder = qty % 2;
+            return pairs * tier2Price + remainder * tier1Price;
         }
 
         function getTierInfo(p) {
             if (!p.tiered) return '';
-            const t1 = p.tier1 || { price: 195 };
-            const t2 = p.tier2 || { price: 375 };
-            return `1 for Rs ${t1.price} | 2 for Rs ${t2.price}`;
+            const t1 = p.tier1.price;
+            const t2 = p.tier2.price;
+            return `1 for Rs ${t1} | 2 for Rs ${t2} (pairs: ${t2} per 2)`;
         }
 
         // Helper to get image URL for a product and color
