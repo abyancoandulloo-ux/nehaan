@@ -98,7 +98,7 @@
             min-height: 100vh;
         }
 
-        /* ----- NAV (mobile‑friendly, brand name bigger & visible) ----- */
+        /* ----- NAV (mobile‑friendly) ----- */
         .navbar-3d {
             display: flex;
             justify-content: space-between;
@@ -140,18 +140,6 @@
             letter-spacing: -0.02em;
             color: #ffffff;
             text-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
-        }
-        .logo-3d span sup {
-            font-size: 0.5em;
-            top: -0.6em;
-            color: #d4af37;
-            -webkit-text-fill-color: #d4af37;
-        }
-        .logo-3d .brand-sub {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.4);
-            font-weight: 300;
-            letter-spacing: 1px;
         }
 
         .nav-links-3d {
@@ -248,7 +236,6 @@
             .btn-journey-3d { padding: 0.4rem 1.2rem; font-size: 0.55rem; }
             .logo-3d img { width: 28px; height: 28px; }
             .logo-3d span { font-size: 1.4rem; }
-            .logo-3d .brand-sub { font-size: 0.55rem; }
         }
 
         /* ----- HERO ----- */
@@ -483,7 +470,7 @@
             font-size: 1rem;
         }
 
-        /* ----- FULL-SCREEN MODAL (with dynamic stock) ----- */
+        /* ----- FULL-SCREEN MODAL with carousel ----- */
         #product-modal {
             position: fixed;
             inset: 0;
@@ -566,20 +553,93 @@
             padding: 0.3rem;
             flex: 1;
             min-height: 0;
+            position: relative;
         }
-        .modal-image .image-main {
+
+        /* Carousel wrapper */
+        .carousel-container {
+            position: relative;
+            width: 100%;
             display: flex;
-            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            touch-action: pan-y;
+            user-select: none;
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.3s ease;
+            will-change: transform;
             width: 100%;
         }
-        .modal-image .image-main img {
+        .carousel-slide {
+            flex: 0 0 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.2rem;
+        }
+        .carousel-slide img {
             max-width: 100%;
             max-height: 30vh;
             object-fit: contain;
             width: auto;
             height: auto;
+            pointer-events: none;
         }
+        @media (min-width: 768px) {
+            .carousel-slide img { max-height: 60vh; }
+        }
+
+        /* Arrows */
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            touch-action: manipulation;
+        }
+        .carousel-arrow:hover { background: rgba(0,0,0,0.8); }
+        .carousel-arrow.prev { left: 4px; }
+        .carousel-arrow.next { right: 4px; }
+        @media (max-width: 767px) {
+            .carousel-arrow { width: 28px; height: 28px; font-size: 1rem; }
+        }
+
+        /* Dots / indicators */
+        .carousel-dots {
+            display: flex;
+            gap: 0.4rem;
+            justify-content: center;
+            margin-top: 0.3rem;
+            flex-wrap: wrap;
+        }
+        .carousel-dots .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.25);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .carousel-dots .dot.active {
+            background: #d4af37;
+        }
+
+        /* Thumbnails and swatches */
         .modal-image .thumbnails {
             display: flex;
             gap: 0.3rem;
@@ -632,7 +692,7 @@
         .modal-image .color-swatches .swatch.mint { background: #98ff98; }
         .modal-image .color-swatches .swatch.white { background: #f5f5f5; }
 
-        /* ----- MOBILE: swatches on the left, image on the right, no scroll ----- */
+        /* ----- MOBILE: swatches on the left, carousel on the right, no scroll ----- */
         @media (max-width: 767px) {
             .modal-image {
                 flex-direction: row !important;
@@ -643,29 +703,15 @@
                 min-height: auto;
                 flex: 0 1 auto;
             }
-            .modal-image .image-main {
+            .modal-image .carousel-container {
                 flex: 1;
-                background: rgba(255,255,255,0.04);
-                border-radius: 10px;
-                padding: 0.2rem;
-                min-height: 80px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
+                min-width: 0;
             }
-            .modal-image .image-main img {
+            .modal-image .carousel-slide img {
                 max-height: 30vh !important;
-                width: auto;
-                max-width: 100%;
             }
             .modal-image .thumbnails {
-                margin-top: 0.1rem !important;
-                gap: 0.15rem !important;
-            }
-            .modal-image .thumbnails .thumb {
-                width: 22px !important;
-                height: 22px !important;
+                display: none !important;
             }
             .modal-image .color-swatches {
                 flex-direction: column !important;
@@ -682,6 +728,8 @@
                 height: 22px !important;
                 margin: 0 !important;
             }
+            .carousel-arrow { width: 24px; height: 24px; font-size: 0.8rem; }
+            .carousel-dots .dot { width: 6px; height: 6px; }
             .modal-body {
                 gap: 0.15rem;
                 padding: 0.2rem 0.4rem;
@@ -693,77 +741,27 @@
                 flex: 1 1 auto;
                 min-height: 0;
             }
-            .modal-details .product-title {
-                font-size: 0.85rem;
-                line-height: 1.05;
-                margin-top: 0;
-            }
-            .modal-details .product-price .current {
-                font-size: 0.95rem;
-            }
-            .modal-details .product-price .tier-info {
-                font-size: 0.55rem;
-            }
-            .modal-details .product-description {
-                font-size: 0.6rem;
-                line-height: 1.2;
-                margin: 0;
-                display: block;
-                overflow: visible;
-                -webkit-line-clamp: unset;
-                max-height: none;
-            }
-            .modal-details .product-features {
-                gap: 0.05rem 0.2rem;
-                padding: 0.05rem 0;
-            }
-            .modal-details .product-features .feature {
-                font-size: 0.5rem;
-                gap: 0.15rem;
-            }
-            .modal-details .product-features .feature i {
-                width: 10px;
-                font-size: 0.4rem;
-            }
-            .modal-details .stock-status {
-                font-size: 0.55rem;
-                padding: 0.05rem 0;
-            }
-            .modal-details .product-divider {
-                margin: 0.05rem 0;
-            }
-            .modal-add-btn {
-                margin-top: 0.15rem;
-                padding: 0.25rem;
-                font-size: 0.55rem;
-                max-width: 100%;
-                gap: 0.2rem;
-            }
-            .modal-add-btn i {
-                font-size: 0.55rem;
-            }
-            .modal-add-btn-secondary {
-                margin-top: 0.05rem;
-                padding: 0.15rem;
-                font-size: 0.45rem;
-                max-width: 100%;
-            }
-            .modal-header h2 {
-                font-size: 0.55rem;
-            }
-            .modal-header button {
-                font-size: 1.2rem;
-            }
-            .modal-container {
-                overflow: hidden;
-            }
+            .modal-details .product-title { font-size: 0.85rem; line-height: 1.05; }
+            .modal-details .product-price .current { font-size: 0.95rem; }
+            .modal-details .product-price .tier-info { font-size: 0.55rem; }
+            .modal-details .product-description { font-size: 0.6rem; line-height: 1.2; margin: 0; display: block; overflow: visible; }
+            .modal-details .product-features { gap: 0.05rem 0.2rem; padding: 0.05rem 0; }
+            .modal-details .product-features .feature { font-size: 0.5rem; gap: 0.15rem; }
+            .modal-details .product-features .feature i { width: 10px; font-size: 0.4rem; }
+            .modal-details .stock-status { font-size: 0.55rem; padding: 0.05rem 0; }
+            .modal-details .product-divider { margin: 0.05rem 0; }
+            .modal-add-btn { margin-top: 0.15rem; padding: 0.25rem; font-size: 0.55rem; max-width: 100%; gap: 0.2rem; }
+            .modal-add-btn i { font-size: 0.55rem; }
+            .modal-add-btn-secondary { margin-top: 0.05rem; padding: 0.25rem; font-size: 0.55rem; max-width: 100%; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 40px; }
+            .modal-header h2 { font-size: 0.55rem; }
+            .modal-header button { font-size: 1.2rem; }
+            .modal-container { overflow: hidden; }
         }
 
         /* desktop overrides for image */
         @media (min-width: 768px) {
-            .modal-image .image-main img { max-height: 60vh; }
+            .modal-image .carousel-slide img { max-height: 60vh; }
             .modal-image { min-height: 300px; }
-            .modal-image .image-main { width: 100%; }
             .modal-body { gap: 1rem; }
         }
 
@@ -831,7 +829,6 @@
             width: 12px;
             font-size: 0.5rem;
         }
-        /* dynamic stock status */
         .modal-details .stock-status {
             display: inline-flex;
             align-items: center;
@@ -840,12 +837,8 @@
             font-weight: 500;
             padding: 0.05rem 0;
         }
-        .modal-details .stock-status.in-stock {
-            color: #4ade80;
-        }
-        .modal-details .stock-status.low-stock {
-            color: #fbbf24;
-        }
+        .modal-details .stock-status.in-stock { color: #4ade80; }
+        .modal-details .stock-status.low-stock { color: #fbbf24; }
         .modal-details .stock-status i { font-size: 0.3rem; }
 
         .modal-add-btn {
@@ -871,15 +864,16 @@
         .modal-add-btn:hover { background: #e6c85a; transform: scale(1.02); }
         .modal-add-btn i { font-size: 0.7rem; }
 
+        /* ----- Continue Shopping button – now more visible ----- */
         .modal-add-btn-secondary {
             margin-top: 0.1rem;
-            padding: 0.2rem;
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.35rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 40px;
-            color: rgba(255,255,255,0.5);
-            font-weight: 500;
-            font-size: 0.5rem;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.6rem;
             cursor: pointer;
             transition: all 0.3s;
             width: 100%;
@@ -890,8 +884,12 @@
             gap: 0.3rem;
         }
         .modal-add-btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
             border-color: #d4af37;
-            color: #fff;
+            color: #d4af37;
+        }
+        @media (min-width: 768px) {
+            .modal-add-btn-secondary { padding: 0.5rem; font-size: 0.75rem; }
         }
 
         /* ----- CART SIDEBAR (full width on mobile) ----- */
@@ -1007,6 +1005,11 @@
             font-size: 0.9rem;
         }
         .cart-footer .total span:last-child { color: #d4af37; font-size: 1.1rem; }
+        .cart-footer .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
         .btn-checkout {
             width: 100%;
             padding: 0.8rem;
@@ -1022,6 +1025,25 @@
             transition: all 0.3s;
         }
         .btn-checkout:hover { background: #e6c85a; }
+        .btn-continue-shopping {
+            width: 100%;
+            padding: 0.7rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 40px;
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-continue-shopping:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.25);
+            color: #fff;
+        }
 
         /* ----- CHECKOUT MODAL ----- */
         #checkout-modal {
@@ -1194,12 +1216,19 @@
             </div>
             <div class="modal-body">
                 <div class="modal-image">
-                    <!-- image + thumbnails first -->
-                    <div class="image-main">
-                        <img id="modalImg" src="" alt="Product" />
-                        <div id="modalThumbnails" class="thumbnails"></div>
+                    <!-- Carousel -->
+                    <div class="carousel-container" id="carouselContainer">
+                        <button class="carousel-arrow prev" onclick="changeImage(-1)">‹</button>
+                        <div class="carousel-track" id="carouselTrack">
+                            <!-- slides inserted by JS -->
+                        </div>
+                        <button class="carousel-arrow next" onclick="changeImage(1)">›</button>
                     </div>
-                    <!-- swatches below on desktop, left on mobile -->
+                    <!-- Dots -->
+                    <div class="carousel-dots" id="carouselDots"></div>
+                    <!-- Thumbnails (desktop) -->
+                    <div id="modalThumbnails" class="thumbnails"></div>
+                    <!-- Color swatches -->
                     <div id="modalColorSwatches" class="color-swatches"></div>
                 </div>
                 <div class="modal-details">
@@ -1208,7 +1237,6 @@
                         <span class="current" id="modalPrice"></span>
                         <span class="tier-info" id="modalTierInfo"></span>
                     </div>
-                    <!-- dynamic stock status -->
                     <div id="modalStockStatus" class="stock-status in-stock">
                         <i class="fa-solid fa-circle"></i> In Stock — Ready to dispatch
                     </div>
@@ -1246,7 +1274,12 @@
                 <span>Subtotal</span>
                 <span id="cartTotal">Rs 0</span>
             </div>
-            <button class="btn-checkout" onclick="proceedCheckout()">Proceed to Checkout</button>
+            <div class="buttons">
+                <button class="btn-checkout" onclick="proceedCheckout()">Proceed to Checkout</button>
+                <button class="btn-continue-shopping" onclick="toggleCart()">
+                    <i class="fa-regular fa-eye"></i> Continue Shopping
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1278,7 +1311,7 @@
 
     <script>
         // --------------------------------------------------------------
-        // 1. PRODUCT DATA (red replaced with pink for p6 & p7)
+        // 1. PRODUCT DATA
         // --------------------------------------------------------------
         const products = [
             { id: 'p1', name: 'Ice Cream Cup Set of 6', price: 250, desc: 'Elegant set of 6 ice cream cups, perfect for desserts and entertaining. Durable glass with a classic design that adds a touch of sophistication to any table setting.', image: 'images/set1.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
@@ -1298,10 +1331,10 @@
                     { url: 'images/bowl3.jpeg', color: 'mint' },
                     { url: 'images/bowl4.jpeg', color: 'white' },
                     { url: 'images/bowl5.jpeg', color: 'green' },
-                    { url: 'images/bowl6.jpeg', color: 'pink' },  // changed from red
+                    { url: 'images/bowl6.jpeg', color: 'pink' },
                     { url: 'images/bowl7.jpeg', color: 'blue' }
                 ],
-                colors: ['pink', 'black', 'blue', 'green', 'mint', 'white'], // changed
+                colors: ['pink', 'black', 'blue', 'green', 'mint', 'white'],
                 tiered: true,
                 tier1: { min: 1, max: 1, price: 225 },
                 tier2: { min: 2, max: 2, price: 425 },
@@ -1318,12 +1351,12 @@
                     { url: 'images/bowl11.jpeg', color: 'default' },
                     { url: 'images/bowl12.jpeg', color: 'black' },
                     { url: 'images/bowl13.jpeg', color: 'green' },
-                    { url: 'images/bowl14.jpeg', color: 'pink' },  // changed from red
+                    { url: 'images/bowl14.jpeg', color: 'pink' },
                     { url: 'images/bowl15.jpeg', color: 'white' },
                     { url: 'images/bowl16.jpeg', color: 'blue' },
                     { url: 'images/bowl17.jpeg', color: 'mint' }
                 ],
-                colors: ['pink', 'black', 'blue', 'green', 'mint', 'white'], // changed
+                colors: ['pink', 'black', 'blue', 'green', 'mint', 'white'],
                 tiered: true,
                 tier1: { min: 1, max: 1, price: 195 },
                 tier2: { min: 2, max: 2, price: 375 },
@@ -1333,13 +1366,12 @@
         ];
 
         // --------------------------------------------------------------
-        // 2. PRICING HELPER – pair pricing logic
+        // 2. PRICING HELPER – pair pricing logic (per product id)
         // --------------------------------------------------------------
         function calculateProductTotal(productId, qty) {
             const p = products.find(prod => prod.id === productId);
             if (!p) return 0;
             if (!p.tiered) return p.price * qty;
-            // Pair pricing: price = pairs * tier2_price + remainder * tier1_price
             const tier1Price = p.tier1.price;
             const tier2Price = p.tier2.price;
             const pairs = Math.floor(qty / 2);
@@ -1369,13 +1401,13 @@
         let selectedColor = null;
         let deliveryFee = 0;
         let filteredProducts = [...products];
+        let currentImageIndex = 0;
 
         // --------------------------------------------------------------
         // 4. DOM REFS
         // --------------------------------------------------------------
         const grid = document.getElementById('productGrid');
         const modal = document.getElementById('product-modal');
-        const modalImg = document.getElementById('modalImg');
         const modalName = document.getElementById('modalName');
         const modalPrice = document.getElementById('modalPrice');
         const modalTierInfo = document.getElementById('modalTierInfo');
@@ -1385,6 +1417,9 @@
         const modalColorSwatches = document.getElementById('modalColorSwatches');
         const modalFeatures = document.getElementById('modalFeatures');
         const modalStockStatus = document.getElementById('modalStockStatus');
+        const carouselTrack = document.getElementById('carouselTrack');
+        const carouselDots = document.getElementById('carouselDots');
+        const carouselContainer = document.getElementById('carouselContainer');
         const cartItems = document.getElementById('cartItems');
         const cartTotal = document.getElementById('cartTotal');
         const cartCount = document.getElementById('cart-count');
@@ -1443,22 +1478,115 @@
         }
 
         // --------------------------------------------------------------
-        // 6. MODAL (uses per‑product image lookup and stock status)
+        // 6. CAROUSEL HELPERS
+        // --------------------------------------------------------------
+        function buildCarousel(images) {
+            carouselTrack.innerHTML = '';
+            images.forEach((img, idx) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                const imgEl = document.createElement('img');
+                imgEl.src = img.url;
+                imgEl.alt = currentProduct ? currentProduct.name : 'Product';
+                imgEl.loading = 'lazy';
+                slide.appendChild(imgEl);
+                carouselTrack.appendChild(slide);
+            });
+            // Dots
+            carouselDots.innerHTML = '';
+            images.forEach((_, idx) => {
+                const dot = document.createElement('span');
+                dot.className = 'dot' + (idx === 0 ? ' active' : '');
+                dot.dataset.index = idx;
+                dot.addEventListener('click', () => goToImage(idx));
+                carouselDots.appendChild(dot);
+            });
+            currentImageIndex = 0;
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            const slides = carouselTrack.children;
+            if (!slides.length) return;
+            const total = slides.length;
+            if (currentImageIndex >= total) currentImageIndex = total - 1;
+            if (currentImageIndex < 0) currentImageIndex = 0;
+            const offset = -currentImageIndex * 100;
+            carouselTrack.style.transform = `translateX(${offset}%)`;
+            // Dots
+            const dots = carouselDots.children;
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].classList.toggle('active', i === currentImageIndex);
+            }
+            // Update thumbnails active state
+            const thumbs = modalThumbnails.querySelectorAll('.thumb');
+            thumbs.forEach((thumb, idx) => {
+                thumb.classList.toggle('active', idx === currentImageIndex);
+            });
+            // Update swatch active state
+            if (currentProduct && currentProduct.colors) {
+                const currentImg = currentProduct.images[currentImageIndex];
+                if (currentImg && currentImg.color !== 'default') {
+                    const color = currentImg.color;
+                    document.querySelectorAll('.swatch').forEach(s => {
+                        s.classList.toggle('active', s.classList.contains(color));
+                    });
+                }
+            }
+        }
+
+        function goToImage(index) {
+            const slides = carouselTrack.children;
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+            currentImageIndex = index;
+            updateCarousel();
+            if (currentProduct && currentProduct.images) {
+                const img = currentProduct.images[index];
+                if (img && img.color !== 'default') {
+                    selectedColor = img.color;
+                }
+            }
+        }
+
+        function changeImage(delta) {
+            goToImage(currentImageIndex + delta);
+        }
+
+        // Swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+        function setupSwipe(container) {
+            container.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            container.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 30) {
+                    if (diff > 0) changeImage(1);
+                    else changeImage(-1);
+                }
+            }, { passive: true });
+        }
+
+        // --------------------------------------------------------------
+        // 7. MODAL
         // --------------------------------------------------------------
         function openModal(id) {
             currentProduct = products.find(p => p.id === id);
             if (!currentProduct) return;
 
-            let mainImage = currentProduct.image;
-            selectedColor = null;
+            let images = currentProduct.images || [{ url: currentProduct.image, color: 'default' }];
+            if (images.length === 0) images = [{ url: currentProduct.image, color: 'default' }];
             if (currentProduct.colors && currentProduct.colors.length > 0) {
                 selectedColor = currentProduct.colors[0];
-                mainImage = getColorImage(currentProduct, selectedColor);
+            } else {
+                selectedColor = null;
             }
+            buildCarousel(images);
 
-            modalImg.src = mainImage;
             modalName.textContent = currentProduct.name;
-
             if (currentProduct.tiered) {
                 const t1 = currentProduct.tier1 || { price: 195 };
                 modalPrice.textContent = `Rs ${t1.price}`;
@@ -1467,10 +1595,8 @@
                 modalPrice.textContent = `Rs ${currentProduct.price}`;
                 modalTierInfo.textContent = '';
             }
-
             modalDesc.textContent = currentProduct.desc;
 
-            // Custom features for bowls
             if (currentProduct.id === 'p6' || currentProduct.id === 'p7') {
                 modalFeatures.innerHTML = `
                     <div class="feature"><i class="fa-solid fa-check"></i> High Borosilicate Glass</div>
@@ -1487,7 +1613,6 @@
                 `;
             }
 
-            // Update stock status
             if (currentProduct.stockStatus) {
                 modalStockStatus.className = `stock-status ${currentProduct.stockStatus.class}`;
                 modalStockStatus.innerHTML = `<i class="fa-solid fa-circle"></i> ${currentProduct.stockStatus.text}`;
@@ -1496,39 +1621,18 @@
                 modalStockStatus.innerHTML = `<i class="fa-solid fa-circle"></i> In Stock — Ready to dispatch`;
             }
 
-            // Thumbnails
             modalThumbnails.innerHTML = '';
-            if (currentProduct.images) {
-                const seen = new Set();
-                currentProduct.images.forEach(img => {
-                    if (!seen.has(img.url)) {
-                        seen.add(img.url);
-                        const thumb = document.createElement('div');
-                        thumb.className = 'thumb';
-                        thumb.innerHTML = `<img src="${img.url}" alt="thumbnail" />`;
-                        thumb.onclick = function(e) {
-                            e.stopPropagation();
-                            modalImg.src = img.url;
-                            // Find color for this image (if any)
-                            const colorMatch = currentProduct.images.find(i => i.url === img.url && i.color !== 'default');
-                            if (colorMatch) {
-                                selectedColor = colorMatch.color;
-                                document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
-                                document.querySelectorAll('.swatch').forEach(s => {
-                                    if (s.classList.contains(selectedColor)) s.classList.add('active');
-                                });
-                            }
-                            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-                            this.classList.add('active');
-                        };
-                        modalThumbnails.appendChild(thumb);
-                    }
-                });
-                const firstThumb = modalThumbnails.querySelector('.thumb');
-                if (firstThumb) firstThumb.classList.add('active');
-            }
+            images.forEach((img, idx) => {
+                const thumb = document.createElement('div');
+                thumb.className = 'thumb' + (idx === 0 ? ' active' : '');
+                thumb.innerHTML = `<img src="${img.url}" alt="thumbnail" />`;
+                thumb.onclick = function(e) {
+                    e.stopPropagation();
+                    goToImage(idx);
+                };
+                modalThumbnails.appendChild(thumb);
+            });
 
-            // Color swatches
             modalColorSwatches.innerHTML = '';
             if (currentProduct.colors && currentProduct.colors.length > 0) {
                 currentProduct.colors.forEach(color => {
@@ -1539,15 +1643,10 @@
                     swatch.onclick = function(e) {
                         e.stopPropagation();
                         selectedColor = color;
-                        const newImg = getColorImage(currentProduct, color);
-                        modalImg.src = newImg;
+                        const idx = images.findIndex(img => img.color === color);
+                        if (idx >= 0) goToImage(idx);
                         document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
                         this.classList.add('active');
-                        // Update thumbnails active state
-                        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-                        document.querySelectorAll('.thumb').forEach(t => {
-                            if (t.querySelector('img').src.includes(color)) t.classList.add('active');
-                        });
                     };
                     modalColorSwatches.appendChild(swatch);
                 });
@@ -1555,6 +1654,10 @@
 
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
+
+            setTimeout(() => {
+                setupSwipe(carouselContainer);
+            }, 100);
         }
 
         function closeModal() {
@@ -1570,27 +1673,21 @@
         };
 
         // --------------------------------------------------------------
-        // 7. CART
+        // 8. CART (merged by product id, colors stored as array)
         // --------------------------------------------------------------
         function addToCart(id, qty, color = null) {
             const p = products.find(prod => prod.id === id);
             if (!p) return;
-            let existing = null;
-            if (color) {
-                existing = cart.find(item => item.id === id && item.color === color);
-            } else {
-                existing = cart.find(item => item.id === id && !item.color);
-            }
+            let existing = cart.find(item => item.id === id);
             if (existing) {
                 existing.quantity += qty;
+                if (color) {
+                    if (!existing.colors) existing.colors = [];
+                    for (let i = 0; i < qty; i++) existing.colors.push(color);
+                }
             } else {
                 const newItem = { ...p, quantity: qty };
-                if (color) newItem.color = color;
-                // Use per‑product image lookup
-                if (color && p.images) {
-                    const imgMatch = p.images.find(img => img.color === color);
-                    if (imgMatch) newItem.image = imgMatch.url;
-                }
+                newItem.colors = color ? [color] : [];
                 cart.push(newItem);
             }
             updateCartUI();
@@ -1598,7 +1695,7 @@
         }
 
         function removeFromCart(id) {
-            cart = cart.filter(item => !(item.id === id));
+            cart = cart.filter(item => item.id !== id);
             updateCartUI();
         }
 
@@ -1610,6 +1707,12 @@
                 const index = cart.indexOf(item);
                 if (index > -1) cart.splice(index, 1);
             } else {
+                if (newQty < item.quantity) {
+                    const removeCount = item.quantity - newQty;
+                    if (item.colors && item.colors.length > 0) {
+                        item.colors.splice(item.colors.length - removeCount, removeCount);
+                    }
+                }
                 item.quantity = newQty;
             }
             updateCartUI();
@@ -1617,7 +1720,9 @@
 
         function getCartSubtotal() {
             let total = 0;
-            cart.forEach(item => total += calculateProductTotal(item.id, item.quantity));
+            cart.forEach(item => {
+                total += calculateProductTotal(item.id, item.quantity);
+            });
             return total;
         }
 
@@ -1645,10 +1750,24 @@
                 if (item.tiered && item.tier1) {
                     priceDisplay = `Rs ${item.tier1.price}`;
                 }
-                const colorDisplay = item.color ? ` (${item.color})` : '';
+                let colorDisplay = '';
+                if (item.colors && item.colors.length > 0) {
+                    const uniqueColors = [...new Set(item.colors)];
+                    let colorStr = uniqueColors.join(', ');
+                    if (uniqueColors.length > 3) {
+                        colorStr = uniqueColors.slice(0, 3).join(', ') + ` +${uniqueColors.length - 3} more`;
+                    }
+                    colorDisplay = ` (Colors: ${colorStr})`;
+                }
+                let imgSrc = item.image;
+                if (item.colors && item.colors.length > 0 && item.images) {
+                    const firstColor = item.colors[0];
+                    const imgMatch = item.images.find(img => img.color === firstColor);
+                    if (imgMatch) imgSrc = imgMatch.url;
+                }
                 html += `
                     <div class="cart-item">
-                        <img src="${item.image}" alt="${item.name}" />
+                        <img src="${imgSrc}" alt="${item.name}" />
                         <div class="info">
                             <h4>${item.name}${colorDisplay}</h4>
                             <div class="price-detail">
@@ -1677,7 +1796,7 @@
         }
 
         // --------------------------------------------------------------
-        // 8. CHECKOUT
+        // 9. CHECKOUT
         // --------------------------------------------------------------
         function proceedCheckout() {
             if (cart.length === 0) return;
@@ -1717,7 +1836,11 @@
                 const sub = calculateProductTotal(item.id, item.quantity);
                 subtotal += sub;
                 const unitPriceDisplay = item.tiered ? `Rs ${item.tier1.price}` : `Rs ${item.price}`;
-                const colorInfo = item.color ? ` (Color: ${item.color})` : '';
+                let colorInfo = '';
+                if (item.colors && item.colors.length > 0) {
+                    const uniqueColors = [...new Set(item.colors)];
+                    colorInfo = ` (Colors: ${uniqueColors.join(', ')})`;
+                }
                 msg += `${index + 1}. ${item.name}${colorInfo} (Quantity: ${item.quantity}) ${unitPriceDisplay} — Rs ${sub.toLocaleString()}\n`;
             });
             const total = subtotal + fee;
@@ -1733,7 +1856,7 @@
         }
 
         // --------------------------------------------------------------
-        // 9. MOBILE MENU
+        // 10. MOBILE MENU
         // --------------------------------------------------------------
         function toggleMobileMenu() {
             const nav = document.getElementById('navLinks');
@@ -1741,7 +1864,7 @@
         }
 
         // --------------------------------------------------------------
-        // 10. VIDEO BACKGROUND
+        // 11. VIDEO BACKGROUND
         // --------------------------------------------------------------
         (function() {
             const v1 = document.getElementById('video1');
@@ -1798,7 +1921,7 @@
         })();
 
         // --------------------------------------------------------------
-        // 11. EVENT LISTENERS
+        // 12. EVENT LISTENERS
         // --------------------------------------------------------------
         searchBtn.addEventListener('click', renderProducts);
         searchInput.addEventListener('keyup', function(e) {
@@ -1820,7 +1943,9 @@
         window.closeCheckout = closeCheckout;
         window.confirmCheckout = confirmCheckout;
         window.toggleMobileMenu = toggleMobileMenu;
+        window.changeImage = changeImage;
+        window.goToImage = goToImage;
     </script>
 
 </body>
-</html>
+</html>s
