@@ -21,7 +21,7 @@
         .serif-title { font-family: 'Playfair Display', serif; }
         ::-webkit-scrollbar { display: none; }
 
-        /* ----- VIDEO BACKGROUND (restored) ----- */
+        /* ----- VIDEO BACKGROUND ----- */
         .video-bg {
             position: fixed;
             top: 0;
@@ -54,7 +54,6 @@
         .video-bg video.active { opacity: 1; }
         .video-bg video.fade-out { opacity: 0; }
 
-        /* ----- Simple gradient overlay (no blur) ----- */
         .gradient-overlay {
             position: fixed;
             inset: 0;
@@ -66,27 +65,28 @@
             pointer-events: none;
         }
 
-        /* ----- floating particles (subtle, no blur) ----- */
         .particle-3d {
             position: fixed;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             pointer-events: none;
             z-index: 1;
             animation: floatParticle 20s ease-in-out infinite alternate;
+            box-shadow: inset 0 0 40px rgba(77, 195, 255, 0.05);
         }
-        .particle-3d:nth-child(1) { width: 150px; height: 150px; top: 5%; left: -2%; animation-delay: 0s; }
-        .particle-3d:nth-child(2) { width: 80px; height: 80px; bottom: 10%; right: 5%; animation-delay: -4s; }
-        .particle-3d:nth-child(3) { width: 200px; height: 200px; top: 40%; left: 75%; animation-delay: -8s; opacity: 0.12; }
-        .particle-3d:nth-child(4) { width: 60px; height: 60px; top: 15%; right: 15%; animation-delay: -12s; }
-        .particle-3d:nth-child(5) { width: 100px; height: 100px; bottom: 25%; left: 10%; animation-delay: -16s; }
+        .particle-3d:nth-child(1) { width: 180px; height: 180px; top: 5%; left: -2%; animation-delay: 0s; }
+        .particle-3d:nth-child(2) { width: 100px; height: 100px; bottom: 10%; right: 5%; animation-delay: -4s; }
+        .particle-3d:nth-child(3) { width: 250px; height: 250px; top: 40%; left: 75%; animation-delay: -8s; opacity: 0.2; }
+        .particle-3d:nth-child(4) { width: 70px; height: 70px; top: 15%; right: 15%; animation-delay: -12s; }
+        .particle-3d:nth-child(5) { width: 130px; height: 130px; bottom: 25%; left: 10%; animation-delay: -16s; }
 
         @keyframes floatParticle {
             0% { transform: translate(0,0) scale(1) rotate(0deg); }
-            33% { transform: translate(30px,-40px) scale(1.05) rotate(120deg); }
-            66% { transform: translate(-20px,20px) scale(0.95) rotate(240deg); }
-            100% { transform: translate(15px,-15px) scale(1.02) rotate(360deg); }
+            33% { transform: translate(40px,-50px) scale(1.1) rotate(120deg); }
+            66% { transform: translate(-30px,30px) scale(0.9) rotate(240deg); }
+            100% { transform: translate(20px,-20px) scale(1.05) rotate(360deg); }
         }
 
         .content {
@@ -97,7 +97,7 @@
             min-height: 100vh;
         }
 
-        /* ----- NAV - solid dark background (no blur) ----- */
+        /* ----- NAV with consistent branding ----- */
         .navbar-3d {
             display: flex;
             justify-content: space-between;
@@ -106,14 +106,16 @@
             max-width: 80rem;
             margin: 1.5rem auto 0;
             width: 92%;
-            background: rgba(10, 10, 15, 0.85);
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px) saturate(1.6);
+            -webkit-backdrop-filter: blur(20px) saturate(1.6);
             border-radius: 80px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
-            transition: all 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .navbar-3d:hover {
-            background: rgba(10, 10, 15, 0.95);
+            background: rgba(255, 255, 255, 0.07);
             border-color: rgba(255, 255, 255, 0.15);
         }
         .logo-3d {
@@ -133,17 +135,10 @@
         .logo-3d span {
             font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
+            font-weight: 600;
             letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #ffffff 60%, #d4af37);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .logo-3d span sup {
-            font-size: 0.5em;
-            top: -0.6em;
-            color: #d4af37;
-            -webkit-text-fill-color: #d4af37;
+            color: #ffffff;
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
         }
 
         .nav-links-3d {
@@ -217,7 +212,7 @@
             .btn-journey-3d { padding: 0.5rem 1.5rem; font-size: 0.65rem; }
         }
 
-        /* ----- HERO ----- */
+        /* ----- HERO (contact) ----- */
         .hero {
             padding: 3rem 1.5rem 2rem;
             text-align: center;
@@ -233,7 +228,7 @@
             background-clip: text;
         }
         .hero p {
-            color: rgba(255,255,255,0.85);
+            color: rgba(255,255,255,0.7);
             max-width: 620px;
             margin: 0.8rem auto 0;
             font-weight: 300;
@@ -241,7 +236,7 @@
             line-height: 1.7;
         }
 
-        /* ----- CONTACT GRID - cards are solid (no blur) ----- */
+        /* ----- CONTACT GRID ----- */
         .contact-grid {
             max-width: 1100px;
             margin: 0 auto 3rem;
@@ -264,11 +259,11 @@
             gap: 1.8rem;
         }
         .info-card {
-            background: rgba(10, 10, 15, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 20px;
             padding: 1.8rem 2rem;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
         }
         .info-card h3 {
             font-family: 'Playfair Display', serif;
@@ -281,7 +276,7 @@
             align-items: center;
             gap: 1rem;
             margin-bottom: 0.8rem;
-            color: rgba(255, 255, 255, 0.85);
+            color: rgba(255,255,255,0.8);
             font-size: 0.95rem;
         }
         .info-card .detail i {
@@ -290,13 +285,12 @@
             font-size: 1rem;
         }
         .info-card .detail a {
-            color: rgba(255, 255, 255, 0.85);
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
             transition: color 0.3s;
         }
         .info-card .detail a:hover { color: #d4af37; }
 
-        /* Address display – no map */
         .address-box {
             margin-top: 0.5rem;
             padding: 1rem 1.2rem;
@@ -315,13 +309,13 @@
             width: 22px;
         }
 
-        /* ----- FORM CARD - solid background ----- */
+        /* ----- FORM CARD ----- */
         .form-card {
-            background: rgba(10, 10, 15, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 20px;
             padding: 1.8rem 2rem;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
         }
         .form-card h3 {
             font-family: 'Playfair Display', serif;
@@ -413,6 +407,7 @@
             letter-spacing: 1px;
             color: rgba(255,255,255,0.15);
             border: 1px solid rgba(255,255,255,0.04);
+            backdrop-filter: blur(4px);
             transition: 0.3s;
             text-decoration: none;
             margin-top: 0.6rem;
@@ -433,7 +428,7 @@
 </head>
 <body>
 
-    <!-- ===== VIDEO BACKGROUND (restored) ===== -->
+    <!-- ===== VIDEO BACKGROUND ===== -->
     <div class="video-bg">
         <div class="video-wrapper">
             <video id="video1" playsinline muted loop preload="metadata">
@@ -460,12 +455,13 @@
         <nav class="navbar-3d">
             <a href="index.html" class="logo-3d">
                 <img src="logo.jpeg" alt="Nehaan Boutique" onerror="this.style.display='none'" />
-                <span>Nehaan<sup>®</sup></span>
+                <span>Nehaan Boutique</span>
             </a>
             <ul class="nav-links-3d" id="navLinks">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="products.html">Collections</a></li>
                 <li><a href="contact.html" style="color:#ffffff;">Contact</a></li>
+                <li><a href="#" style="color:rgba(255,255,255,0.4);"><i class="fa-solid fa-lock"></i> Manager</a></li>
                 <li><a href="products.html" class="btn-journey-3d">Shop Now</a></li>
             </ul>
             <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -473,7 +469,7 @@
             </button>
         </nav>
 
-        <!-- ===== HERO ===== -->
+        <!-- ===== HERO with descriptive text ===== -->
         <div class="hero">
             <h1>We'd Love to Hear From You</h1>
             <p>
@@ -485,7 +481,7 @@
 
         <!-- ===== CONTACT GRID ===== -->
         <div class="contact-grid">
-            <!-- LEFT: Info + Address (no map) -->
+            <!-- LEFT: Info + Address -->
             <div class="contact-info">
                 <div class="info-card">
                     <h3><i class="fa-regular fa-address-card" style="color:#d4af37;margin-right:10px;"></i> Contact Details</h3>
@@ -503,7 +499,7 @@
                     </div>
                     <div class="address-box">
                         <i class="fa-regular fa-location-dot"></i>
-                        <span>Morcellement Chazal, Albion, near public beach</span>
+                        <span>Morcellement Chazal, Albion</span>
                     </div>
                 </div>
             </div>
@@ -553,6 +549,7 @@
         // ===== FORM SUBMISSION TO WHATSAPP =====
         function sendWhatsApp(e) {
             e.preventDefault();
+
             const name = document.getElementById('name').value.trim();
             const subject = document.getElementById('subject').value.trim();
             const message = document.getElementById('message').value.trim();
