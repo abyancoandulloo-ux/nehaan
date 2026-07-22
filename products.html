@@ -478,7 +478,7 @@
             font-size: 1rem;
         }
 
-        /* ----- FULL-SCREEN MODAL ----- */
+        /* ----- FULL-SCREEN MODAL (with dynamic stock) ----- */
         #product-modal {
             position: fixed;
             inset: 0;
@@ -562,7 +562,6 @@
             min-height: 200px;
             flex: 1;
         }
-        /* on desktop, keep original order: image, thumbnails, swatches */
         .modal-image .image-main {
             display: flex;
             flex-direction: column;
@@ -625,10 +624,7 @@
         .modal-image .color-swatches .swatch.black { background: #1f1f1f; }
         .modal-image .color-swatches .swatch.blue { background: #2563eb; }
         .modal-image .color-swatches .swatch.green { background: #16a34a; }
-        .modal-image .color-swatches .swatch.transparent { 
-            background: linear-gradient(45deg, #ccc 25%, #eee 25%, #eee 50%, #ccc 50%, #ccc 75%, #eee 75%, #eee);
-            background-size: 10px 10px;
-        }
+        .modal-image .color-swatches .swatch.mint { background: #98ff98; } /* added mint */
         .modal-image .color-swatches .swatch.white { background: #f5f5f5; }
 
         /* ----- MOBILE: swatches on the left, image on the right ----- */
@@ -665,7 +661,6 @@
                 width: 36px !important;
                 height: 36px !important;
             }
-            /* swatches become a vertical column on the left */
             .modal-image .color-swatches {
                 flex-direction: column !important;
                 gap: 0.6rem !important;
@@ -759,13 +754,20 @@
             width: 14px;
             font-size: 0.6rem;
         }
+        /* dynamic stock status */
         .modal-details .stock-status {
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            color: #4ade80;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             font-weight: 500;
+            padding: 0.2rem 0;
+        }
+        .modal-details .stock-status.in-stock {
+            color: #4ade80;
+        }
+        .modal-details .stock-status.low-stock {
+            color: #fbbf24; /* amber/yellow */
         }
         .modal-details .stock-status i { font-size: 0.4rem; }
 
@@ -1120,7 +1122,7 @@
                         <img id="modalImg" src="" alt="Product" />
                         <div id="modalThumbnails" class="thumbnails"></div>
                     </div>
-                    <!-- swatches below on desktop, but on mobile they'll move to left via CSS -->
+                    <!-- swatches below on desktop, left on mobile -->
                     <div id="modalColorSwatches" class="color-swatches"></div>
                 </div>
                 <div class="modal-details">
@@ -1129,7 +1131,8 @@
                         <span class="current" id="modalPrice"></span>
                         <span class="tier-info" id="modalTierInfo"></span>
                     </div>
-                    <div class="stock-status">
+                    <!-- dynamic stock status -->
+                    <div id="modalStockStatus" class="stock-status in-stock">
                         <i class="fa-solid fa-circle"></i> In Stock — Ready to dispatch
                     </div>
                     <hr class="product-divider" />
@@ -1198,14 +1201,14 @@
 
     <script>
         // --------------------------------------------------------------
-        // 1. PRODUCT DATA
+        // 1. PRODUCT DATA (with mint green replacing transparent & stockStatus)
         // --------------------------------------------------------------
         const products = [
-            { id: 'p1', name: 'Ice Cream Cup Set of 6', price: 250, desc: 'Elegant set of 6 ice cream cups, perfect for desserts and entertaining. Durable glass with a classic design that adds a touch of sophistication to any table setting.', image: 'images/set1.jpeg' },
-            { id: 'p2', name: '225ml Glass Set of 6', price: 200, desc: 'Versatile 225ml glasses, ideal for juices, water, or cocktails. A practical and stylish set of 6 for everyday use, suitable for both casual and formal occasions.', image: 'images/set2.jpeg' },
-            { id: 'p3', name: '225ml Glass Set of 6 (Design)', price: 150, desc: 'Stylish 225ml glasses with a modern, eye-catching design. Set of 6, perfect for enhancing any table setting with a contemporary flair.', image: 'images/set3.jpeg' },
-            { id: 'p4', name: 'Long Verre Design 225ml Set of 6', price: 225, desc: 'Tall, elegant glasses with a sleek, sophisticated design. 225ml capacity, set of 6. Ideal for long drinks, iced teas, and refreshing beverages.', image: 'images/set4.jpeg' },
-            { id: 'p5', name: 'Long Verre Octogone 285ml Set of 6', price: 200, desc: 'Octagonal-shaped tall glasses with a unique geometric pattern. 285ml capacity, set of 6. Adds a distinctive and modern touch to your glassware collection.', image: 'images/set5.jpeg' },
+            { id: 'p1', name: 'Ice Cream Cup Set of 6', price: 250, desc: 'Elegant set of 6 ice cream cups, perfect for desserts and entertaining. Durable glass with a classic design that adds a touch of sophistication to any table setting.', image: 'images/set1.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
+            { id: 'p2', name: 'Red Cherry Glass(Plain) 225ml Set of 6', price: 200, desc: 'Versatile 225ml glasses, ideal for juices, water, or cocktails. A practical and stylish set of 6 for everyday use, suitable for both casual and formal occasions.', image: 'images/set2.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
+            { id: 'p3', name: 'Red Cherry Glass 225ml Set of 6', price: 150, desc: 'Stylish 225ml glasses with a modern, eye-catching design. Set of 6, perfect for enhancing any table setting with a contemporary flair.', image: 'images/set3.jpeg', stockStatus: { text: 'Only a few stock left', class: 'low-stock' } },
+            { id: 'p4', name: 'Red Cherry Glass(Design) 225ml Set of 6', price: 225, desc: 'Tall, elegant glasses with a sleek, sophisticated design. 225ml capacity, set of 6. Ideal for long drinks, iced teas, and refreshing beverages.', image: 'images/set4.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
+            { id: 'p5', name: 'Red Cherry Octogone 285ml Set of 6', price: 200, desc: 'Octagonal-shaped tall glasses with a unique geometric pattern. 285ml capacity, set of 6. Adds a distinctive and modern touch to your glassware collection.', image: 'images/set5.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
             { 
                 id: 'p6', 
                 name: '2 compartment 1040ml Glass Bowl', 
@@ -1215,17 +1218,18 @@
                 images: [
                     { url: 'images/bowl1.jpeg', color: 'default' },
                     { url: 'images/bowl2.jpeg', color: 'black' },
-                    { url: 'images/bowl3.jpeg', color: 'transparent' },
+                    { url: 'images/bowl3.jpeg', color: 'mint' },      // changed from transparent
                     { url: 'images/bowl4.jpeg', color: 'white' },
                     { url: 'images/bowl5.jpeg', color: 'green' },
                     { url: 'images/bowl6.jpeg', color: 'red' },
                     { url: 'images/bowl7.jpeg', color: 'blue' }
                 ],
-                colors: ['red', 'black', 'blue', 'green', 'transparent', 'white'],
+                colors: ['red', 'black', 'blue', 'green', 'mint', 'white'], // changed
                 tiered: true,
                 tier1: { min: 1, max: 1, price: 225 },
                 tier2: { min: 2, max: 2, price: 425 },
-                tier3: { min: 3, max: null, unitPrice: 225 }
+                tier3: { min: 3, max: null, unitPrice: 225 },
+                stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' }
             },
             {
                 id: 'p7',
@@ -1240,13 +1244,14 @@
                     { url: 'images/bowl14.jpeg', color: 'red' },
                     { url: 'images/bowl15.jpeg', color: 'white' },
                     { url: 'images/bowl16.jpeg', color: 'blue' },
-                    { url: 'images/bowl17.jpeg', color: 'transparent' }
+                    { url: 'images/bowl17.jpeg', color: 'mint' }      // changed from transparent
                 ],
-                colors: ['red', 'black', 'blue', 'green', 'transparent', 'white'],
+                colors: ['red', 'black', 'blue', 'green', 'mint', 'white'], // changed
                 tiered: true,
                 tier1: { min: 1, max: 1, price: 195 },
                 tier2: { min: 2, max: 2, price: 375 },
-                tier3: { min: 3, max: null, unitPrice: 195 }
+                tier3: { min: 3, max: null, unitPrice: 195 },
+                stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' }
             }
         ];
 
@@ -1302,6 +1307,7 @@
         const modalThumbnails = document.getElementById('modalThumbnails');
         const modalColorSwatches = document.getElementById('modalColorSwatches');
         const modalFeatures = document.getElementById('modalFeatures');
+        const modalStockStatus = document.getElementById('modalStockStatus'); // new
         const cartItems = document.getElementById('cartItems');
         const cartTotal = document.getElementById('cartTotal');
         const cartCount = document.getElementById('cart-count');
@@ -1360,7 +1366,7 @@
         }
 
         // --------------------------------------------------------------
-        // 6. MODAL (uses per‑product image lookup)
+        // 6. MODAL (uses per‑product image lookup and stock status)
         // --------------------------------------------------------------
         function openModal(id) {
             currentProduct = products.find(p => p.id === id);
@@ -1402,6 +1408,15 @@
                     <div class="feature"><i class="fa-solid fa-check"></i> Dishwasher safe</div>
                     <div class="feature"><i class="fa-solid fa-check"></i> Elegant design</div>
                 `;
+            }
+
+            // Update stock status
+            if (currentProduct.stockStatus) {
+                modalStockStatus.className = `stock-status ${currentProduct.stockStatus.class}`;
+                modalStockStatus.innerHTML = `<i class="fa-solid fa-circle"></i> ${currentProduct.stockStatus.text}`;
+            } else {
+                modalStockStatus.className = 'stock-status in-stock';
+                modalStockStatus.innerHTML = `<i class="fa-solid fa-circle"></i> In Stock — Ready to dispatch`;
             }
 
             // Thumbnails
