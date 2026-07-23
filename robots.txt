@@ -1,0 +1,21 @@
+# robots.txt for nehaanboutique.com
+# Allow all search engines to crawl the entire site
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://nehaanboutique.com/sitemap.xml
+
+# Disallow any private or admin areas (if you have them)
+# Example: if you have a manager portal
+Disallow: /manager.html
+Disallow: /admin/
+Disallow: /private/
+
+# Disallow any dynamic/duplicate content that you don't want indexed
+# For example, if you use query parameters for sorting/filtering
+Disallow: /products.html?*
+Disallow: /*?sort=
+Disallow: /*?search=
+
+# Allow images and resources to be crawled (already allowed by default)
