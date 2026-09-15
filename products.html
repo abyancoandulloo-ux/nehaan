@@ -448,6 +448,18 @@
             color: #0a0a0f;
             border-color: #d4af37;
         }
+        .btn-add:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.3);
+        }
+        .btn-add:disabled:hover {
+            background: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.1);
+        }
 
         @media (min-width: 480px) {
             .product-card .info h3 { font-size: 0.95rem; }
@@ -832,6 +844,7 @@
         }
         .modal-details .stock-status.in-stock { color: #4ade80; }
         .modal-details .stock-status.low-stock { color: #fbbf24; }
+        .modal-details .stock-status.out-of-stock { color: #ef4444; }
         .modal-details .stock-status i { font-size: 0.3rem; }
 
         .modal-add-btn {
@@ -856,6 +869,13 @@
         }
         .modal-add-btn:hover { background: #e6c85a; transform: scale(1.02); }
         .modal-add-btn i { font-size: 0.8rem; }
+        .modal-add-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.4);
+        }
+        .modal-add-btn:disabled:hover { transform: none; background: rgba(255,255,255,0.1); }
         @media (min-width: 768px) {
             .modal-add-btn { padding: 0.6rem; font-size: 0.9rem; }
             .modal-add-btn i { font-size: 0.9rem; }
@@ -1312,8 +1332,8 @@
         // --------------------------------------------------------------
         const products = [
             { id: 'p1', name: 'Ice Cream Cup Set of 6', price: 250, desc: 'Elegant set of 6 ice cream cups, perfect for desserts and entertaining. Durable glass with a classic design that adds a touch of sophistication to any table setting.', image: 'images/set1.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
-            { id: 'p2', name: 'Red Cherry Glass(Plain) 225ml Set of 6', price: 200, desc: 'Versatile 225ml glasses, ideal for juices, water, or cocktails. A practical and stylish set of 6 for everyday use, suitable for both casual and formal occasions.', image: 'images/set2.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
-            { id: 'p3', name: 'Red Cherry Glass 225ml Set of 6', price: 150, desc: 'Stylish 225ml glasses with a modern, eye-catching design. Set of 6, perfect for enhancing any table setting with a contemporary flair.', image: 'images/set3.jpeg', stockStatus: { text: 'Only a few stock left', class: 'low-stock' } },
+            { id: 'p2', name: 'Red Cherry Glass(Plain) 225ml Set of 6', price: 200, desc: 'Versatile 225ml glasses, ideal for juices, water, or cocktails. A practical and stylish set of 6 for everyday use, suitable for both casual and formal occasions.', image: 'images/set2.jpeg', stockStatus: { text: 'Out of Stock', class: 'out-of-stock' } },
+            { id: 'p3', name: 'Red Cherry Glass 225ml Set of 6', price: 150, desc: 'Stylish 225ml glasses with a modern, eye-catching design. Set of 6, perfect for enhancing any table setting with a contemporary flair.', image: 'images/set3.jpeg', stockStatus: { text: 'Out of Stock', class: 'out-of-stock' } },
             { id: 'p4', name: 'Red Cherry Glass(Design) 225ml Set of 6', price: 225, desc: 'Tall, elegant glasses with a sleek, sophisticated design. 225ml capacity, set of 6. Ideal for long drinks, iced teas, and refreshing beverages.', image: 'images/set4.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
             { id: 'p5', name: 'Red Cherry Octogone 285ml Set of 6', price: 200, desc: 'Octagonal-shaped tall glasses with a unique geometric pattern. 285ml capacity, set of 6. Adds a distinctive and modern touch to your glassware collection.', image: 'images/set5.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
             
@@ -1362,7 +1382,11 @@
                 stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' }
             },
             { id: 'p8', name: 'Set of 3 pieces', price: 550, desc: 'Oven and microwave safe. Versatile set of 3 rectangular food containers crafted from high-quality borosilicate glass. Perfect for storing leftovers, meal prep, or baking. Safe for oven, microwave, fridge, freezer, and dishwasher, offering ultimate convenience and durability for everyday use.', image: 'images/set31.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
-{ id: 'p9', name: 'Glass Bowl 700ml', price: 250, desc: 'Oven and microwave safe.Sturdy 700ml glass bowl made of high-quality borosilicate glass. Oven and microwave safe, ideal for baking, reheating, and serving. Lightweight yet durable, it’s a reliable everyday kitchen companion.', image: 'images/bowl700.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },            { id: 'p10', name: 'Glass Bowl 1200ml', price: 295, desc: 'Spacious 1200ml glass bowl crafted from premium high borosilicate glass. Perfect for large salads, mixing dough, or batch cooking. Designed for maximum versatility with full compatibility for oven, microwave, fridge, freezer, and dishwasher.', image: 'images/bowl1200.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
+            { id: 'p9', name: 'Glass Bowl 700ml', price: 250, desc: 'Oven and microwave safe.Sturdy 700ml glass bowl made of high-quality borosilicate glass. Oven and microwave safe, ideal for baking, reheating, and serving. Lightweight yet durable, it’s a reliable everyday kitchen companion.', image: 'images/bowl700.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
+            { id: 'p10', name: 'Glass Bowl 1200ml', price: 295, desc: 'Spacious 1200ml glass bowl crafted from premium high borosilicate glass. Perfect for large salads, mixing dough, or batch cooking. Designed for maximum versatility with full compatibility for oven, microwave, fridge, freezer, and dishwasher.', image: 'images/bowl1200.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
+            { id: 'p11', name: 'Set of 3 Glass Bowl', price: 350, desc: 'High Borosilicate Glass. Oven, microwave, fridge, freezer and dishwasher safe.', image: 'images/bowl350.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
+            { id: 'p12', name: 'Square Glass 190ml Set of 6', price: 175, desc: 'High Quality Glass. Set of 6.', image: 'images/squareGlass.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
+            { id: 'p13', name: 'Salad Bowl 1600ml', price: 275, desc: 'High Borosilicate Glass. Oven, microwave, fridge, freezer and dishwasher safe.', image: 'images/saladBowl.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
         ];
 
         // --------------------------------------------------------------
@@ -1461,6 +1485,10 @@
                 if (p.tiered && p.tier1) {
                     displayPrice = `Rs ${p.tier1.price}`;
                 }
+                const isOutOfStock = p.stockStatus && p.stockStatus.class === 'out-of-stock';
+                const addButton = isOutOfStock 
+                    ? `<button class="btn-add" disabled>Out of Stock</button>`
+                    : `<button class="btn-add" onclick="event.stopPropagation(); addToCart('${p.id}', 1, null)">Add to Cart</button>`;
                 return `
                 <div class="product-card" onclick="openModal('${p.id}')">
                     <div class="img-wrap">
@@ -1470,7 +1498,7 @@
                         <h3>${p.name}</h3>
                         <div class="price">${displayPrice}</div>
                         <div class="desc">${p.desc}</div>
-                        <button class="btn-add" onclick="event.stopPropagation(); addToCart('${p.id}', 1, null)">Add to Cart</button>
+                        ${addButton}
                     </div>
                 </div>
             `}).join('');
@@ -1591,7 +1619,7 @@
             }
             modalDesc.textContent = currentProduct.desc;
 
-            if (currentProduct.id === 'p6' || currentProduct.id === 'p7') {
+            if (currentProduct.id === 'p6' || currentProduct.id === 'p7' || currentProduct.id === 'p11' || currentProduct.id === 'p13') {
                 modalFeatures.innerHTML = `
                     <div class="feature"><i class="fa-solid fa-check"></i> High Borosilicate Glass</div>
                     <div class="feature"><i class="fa-solid fa-check"></i> Oven & Microwave Safe</div>
@@ -1613,6 +1641,16 @@
             } else {
                 modalStockStatus.className = 'stock-status in-stock';
                 modalStockStatus.innerHTML = `<i class="fa-solid fa-circle"></i> In Stock — Ready to dispatch`;
+            }
+
+            // Handle Add to Cart button state based on stock
+            const isOutOfStock = currentProduct.stockStatus && currentProduct.stockStatus.class === 'out-of-stock';
+            if (isOutOfStock) {
+                modalAddBtn.disabled = true;
+                modalAddBtn.innerHTML = '<i class="fa-solid fa-ban"></i> Out of Stock';
+            } else {
+                modalAddBtn.disabled = false;
+                modalAddBtn.innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to Cart';
             }
 
             modalThumbnails.innerHTML = '';
@@ -1661,6 +1699,8 @@
 
         modalAddBtn.onclick = function() {
             if (!currentProduct) return;
+            // Double-check out of stock (button should be disabled, but just in case)
+            if (currentProduct.stockStatus && currentProduct.stockStatus.class === 'out-of-stock') return;
             const color = currentProduct.colors ? selectedColor : null;
             addToCart(currentProduct.id, 1, color);
             closeModal();
@@ -1672,6 +1712,10 @@
         function addToCart(id, qty, color = null) {
             const p = products.find(prod => prod.id === id);
             if (!p) return;
+            // Block out-of-stock products
+            if (p.stockStatus && p.stockStatus.class === 'out-of-stock') {
+                return;
+            }
             let existing = cart.find(item => item.id === id);
             if (existing) {
                 existing.quantity += qty;
