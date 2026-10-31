@@ -710,6 +710,8 @@
         .modal-image-wrap .color-swatches .swatch.green { background: #16a34a; }
         .modal-image-wrap .color-swatches .swatch.mint { background: #98ff98; }
         .modal-image-wrap .color-swatches .swatch.white { background: #f5f5f5; }
+        .modal-image-wrap .color-swatches .swatch.brown { background: #8B4513; }
+        .modal-image-wrap .color-swatches .swatch.cream { background: #F5F5DC; }
 
         /* ----- MOBILE: swatches on the left, carousel on the right ----- */
         @media (max-width: 767px) {
@@ -1387,6 +1389,61 @@
             { id: 'p11', name: 'Set of 3 Glass Bowl', price: 350, desc: 'High Borosilicate Glass. Oven, microwave, fridge, freezer and dishwasher safe.', image: 'images/bowl350.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
             { id: 'p12', name: 'Square Glass 190ml Set of 6', price: 175, desc: 'High Quality Glass. Set of 6.', image: 'images/squareGlass.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
             { id: 'p13', name: 'Salad Bowl 1600ml', price: 275, desc: 'High Borosilicate Glass. Oven, microwave, fridge, freezer and dishwasher safe.', image: 'images/saladBowl.jpeg', stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } },
+
+            // ---- NEW PRODUCTS ----
+            { 
+                id: 'p14', 
+                name: 'Square Glass 270ml Set of 6', 
+                price: 225, 
+                desc: 'High Quality Glass. Set of 6. Perfect for serving beverages with a modern square design.', 
+                image: 'images/square.jpeg', 
+                stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } 
+            },
+            { 
+                id: 'p15', 
+                name: 'Round Glass Bowl 880ml', 
+                price: 195,
+                desc: 'High Borosilicate Glass. Microwave, fridge, freezer and dishwasher safe. Versatile round bowl for everyday use.',
+                image: 'images/round.jpeg',
+                tiered: true,
+                tier1: { min: 1, max: 1, price: 195 },
+                tier2: { min: 2, max: 2, price: 375 },
+                tier3: { min: 3, max: null, unitPrice: 195 },
+                stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' }
+            },
+            { 
+                id: 'p16', 
+                name: 'Glass Bowl With Silicone Cover 850ml', 
+                price: 215,
+                desc: 'High Borosilicate Glass. Microwave, fridge, freezer and dishwasher safe. Includes silicone cover for fresh storage.',
+                image: 'images/silicone.jpeg',
+                tiered: true,
+                tier1: { min: 1, max: 1, price: 215 },
+                tier2: { min: 2, max: 2, price: 400 },
+                tier3: { min: 3, max: null, unitPrice: 215 },
+                stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' }
+            },
+            { 
+                id: 'p17', 
+                name: 'Salad Bowl 1600ml', 
+                price: 275, 
+                desc: 'High Borosilicate Glass. Oven, microwave, fridge, freezer and dishwasher safe. Large capacity for salads and more.', 
+                image: 'images/salad.jpeg', 
+                stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' } 
+            },
+            { 
+                id: 'p18', 
+                name: 'Square Glass Bowl 800ml', 
+                price: 190,
+                desc: 'High Borosilicate Glass. Microwave, fridge, freezer and dishwasher safe. Available in 3 colours: Pink, Brown, Cream.',
+                image: 'images/squareGlass2.jpeg',
+                colors: ['pink', 'brown', 'cream'],
+                tiered: true,
+                tier1: { min: 1, max: 1, price: 190 },
+                tier2: { min: 2, max: 2, price: 365 },
+                tier3: { min: 3, max: null, unitPrice: 190 },
+                stockStatus: { text: 'In Stock — Ready to dispatch', class: 'in-stock' }
+            }
         ];
 
         // --------------------------------------------------------------
@@ -1421,6 +1478,7 @@
         // --------------------------------------------------------------
         let cart = [];
         let currentProduct = null;
+        let currentImages = [];          // <-- images of the currently open product
         let selectedColor = null;
         let deliveryFee = 0;
         let filteredProducts = [...products];
@@ -1509,7 +1567,7 @@
         // --------------------------------------------------------------
         function buildCarousel(images) {
             carouselTrack.innerHTML = '';
-            images.forEach((img, idx) => {
+            images.forEach((img) => {
                 const slide = document.createElement('div');
                 slide.className = 'carousel-slide';
                 const imgEl = document.createElement('img');
@@ -1547,26 +1605,28 @@
             thumbs.forEach((thumb, idx) => {
                 thumb.classList.toggle('active', idx === currentImageIndex);
             });
-            if (currentProduct && currentProduct.colors) {
-                const currentImg = currentProduct.images[currentImageIndex];
-                if (currentImg && currentImg.color !== 'default') {
-                    const color = currentImg.color;
+
+            // Highlight the matching colour swatch (only when the image has a colour)
+            if (currentProduct && currentProduct.colors && currentImages[currentImageIndex]) {
+                const currentImg = currentImages[currentImageIndex];
+                if (currentImg.color && currentImg.color !== 'default') {
                     document.querySelectorAll('.swatch').forEach(s => {
-                        s.classList.toggle('active', s.classList.contains(color));
+                        s.classList.toggle('active', s.classList.contains(currentImg.color));
                     });
                 }
             }
         }
 
         function goToImage(index) {
-            const slides = carouselTrack.children;
-            if (index < 0) index = slides.length - 1;
-            if (index >= slides.length) index = 0;
+            const total = carouselTrack.children.length;
+            if (!total) return;
+            if (index < 0) index = total - 1;
+            if (index >= total) index = 0;
             currentImageIndex = index;
             updateCarousel();
-            if (currentProduct && currentProduct.images) {
-                const img = currentProduct.images[index];
-                if (img && img.color !== 'default') {
+            if (currentImages[index]) {
+                const img = currentImages[index];
+                if (img.color && img.color !== 'default') {
                     selectedColor = img.color;
                 }
             }
@@ -1599,8 +1659,12 @@
             currentProduct = products.find(p => p.id === id);
             if (!currentProduct) return;
 
-            let images = currentProduct.images || [{ url: currentProduct.image, color: 'default' }];
-            if (images.length === 0) images = [{ url: currentProduct.image, color: 'default' }];
+            // Build a guaranteed list of images (even if the product has no `images` array)
+            let images = Array.isArray(currentProduct.images) && currentProduct.images.length
+                ? currentProduct.images
+                : [{ url: currentProduct.image, color: 'default' }];
+            currentImages = images;   // <-- store for carousel helpers
+
             if (currentProduct.colors && currentProduct.colors.length > 0) {
                 selectedColor = currentProduct.colors[0];
             } else {
@@ -1610,7 +1674,7 @@
 
             modalName.textContent = currentProduct.name;
             if (currentProduct.tiered) {
-                const t1 = currentProduct.tier1 || { price: 195 };
+                const t1 = currentProduct.tier1 || { price: currentProduct.price };
                 modalPrice.textContent = `Rs ${t1.price}`;
                 modalTierInfo.textContent = getTierInfo(currentProduct);
             } else {
@@ -1619,7 +1683,9 @@
             }
             modalDesc.textContent = currentProduct.desc;
 
-            if (currentProduct.id === 'p6' || currentProduct.id === 'p7' || currentProduct.id === 'p11' || currentProduct.id === 'p13') {
+            // Feature lists
+            const borosilicateIds = ['p6','p7','p11','p13','p15','p16','p17','p18'];
+            if (borosilicateIds.includes(currentProduct.id)) {
                 modalFeatures.innerHTML = `
                     <div class="feature"><i class="fa-solid fa-check"></i> High Borosilicate Glass</div>
                     <div class="feature"><i class="fa-solid fa-check"></i> Oven & Microwave Safe</div>
@@ -1675,7 +1741,7 @@
                     swatch.onclick = function(e) {
                         e.stopPropagation();
                         selectedColor = color;
-                        const idx = images.findIndex(img => img.color === color);
+                        const idx = currentImages.findIndex(img => img.color === color);
                         if (idx >= 0) goToImage(idx);
                         document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
                         this.classList.add('active');
@@ -1699,7 +1765,6 @@
 
         modalAddBtn.onclick = function() {
             if (!currentProduct) return;
-            // Double-check out of stock (button should be disabled, but just in case)
             if (currentProduct.stockStatus && currentProduct.stockStatus.class === 'out-of-stock') return;
             const color = currentProduct.colors ? selectedColor : null;
             addToCart(currentProduct.id, 1, color);
@@ -1712,7 +1777,6 @@
         function addToCart(id, qty, color = null) {
             const p = products.find(prod => prod.id === id);
             if (!p) return;
-            // Block out-of-stock products
             if (p.stockStatus && p.stockStatus.class === 'out-of-stock') {
                 return;
             }
